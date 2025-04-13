@@ -1,7 +1,7 @@
 #include <memory>
 #include <stdexcept>
 
-template<typename ElementType>
+template<typename ElementType, typename Compare=std::less<>>
 class OrderedVector {
 public:
     OrderedVector(unsigned int maxLen)
@@ -26,11 +26,12 @@ public:
 private:
     unsigned int m_len = 0;
     unsigned int m_maxLen;
+    Compare m_compare;
     std::unique_ptr<ElementType[]> m_data;
 };
 
-template<typename ElementType>
-bool OrderedVector<ElementType>::add(ElementType value) {
+template<typename ElementType, typename Compare>
+bool OrderedVector<ElementType, Compare>::add(ElementType value) {
     if (m_len >= m_maxLen) {
         return false;
     }
