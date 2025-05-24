@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <array>
-
+#include <memory>
 
 /* --------------------------------------------------------------------------------------------
  * Unique ownership.
@@ -50,12 +50,9 @@ void changeLargeObject( LargeObject & object ) {
 // and unfortunately, something goes wrong...
 
 void doStuff() {
+    std::unique_ptr<LargeObject> obj = std::make_unique<LargeObject>();
+    changeLargeObject(*obj);
 
-    // MAKE YOUR CHANGES IN THIS FUNCTION
-
-    auto obj = new LargeObject ;
-    changeLargeObject(*obj) ;
-    delete obj ;
 
 }
 

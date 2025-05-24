@@ -3,7 +3,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
-
+#include <memory>
 
 /* --------------------------------------------------------------------------------------------
  * Smart pointers as class members.
@@ -41,13 +41,13 @@ class Owner {
 
   public:
 
-    Owner() : _largeObject( new LargeObject() ) {}
-    LargeObject * getLargeObject() { return _largeObject ; }
-    ~Owner() { delete _largeObject ; }
+    Owner() : _largeObject(std::make_shared<LargeObject>()) {}
+    LargeObject* getLargeObject() {return _largeObject.get(); }
+    ~Owner()= default;
 
   private:
 
-    LargeObject * _largeObject ;
+    std::shared_ptr<LargeObject> _largeObject;
 
 } ;
 

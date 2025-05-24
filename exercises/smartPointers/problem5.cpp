@@ -45,7 +45,8 @@ class Owner {
   public:
 
     Owner() : _largeObject( new LargeObject() ) {}
-    LargeObject * getLargeObject() const { return _largeObject.get() ; }
+    std::shared_ptr<LargeObject> getLargeObject() const { 
+        return _largeObject; }
 
   private:
 
@@ -61,19 +62,25 @@ class Observer {
 
     Observer( const Owner & owner ) : _largeObject(owner.getLargeObject()) {}
 
-    void setValue( double v ) {
-        if (_largeObject) { _largeObject->data[0] = v ; }
-        else { _largeObject->data[0] = 0. ; }
+  void setValue(double v) {
+        if (auto ptr = _largeObject.lock()) {
+            ptr->data[0] = v;
+        } else {
+            std::cout << "Object expired during setValue()\n";
+        }
     }
 
-    double getValue() const {
-        if (_largeObject) { return _largeObject->data[0] ; }
-        else { return -1. ; }
+  double getValue() const {
+        if (auto ptr = _largeObject.lock()) {
+            return ptr->data[0];
+        } else {
+            std::cout << "Object expired during getValue()\n";
+            return -1.;
+        }
     }
-
   private:
 
-    LargeObject * _largeObject ;
+ std::weak_ptr<LargeObject> _largeObject;
 
 } ;
 

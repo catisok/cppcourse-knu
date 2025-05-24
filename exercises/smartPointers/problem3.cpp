@@ -5,7 +5,7 @@
 #include <vector>
 #include <random>
 #include <algorithm>
-
+#include <memory>
 
 /* --------------------------------------------------------------------------------------------
  * Shared ownership.
@@ -49,7 +49,8 @@ struct LargeObject {
 // in a random place. Such elements can by known in
 // several vectors, so they must not be deleted.
 
-void removeRandom( std::vector<LargeObject *> & collection, std::default_random_engine & engine ) {
+void removeRandom(std::vector<std::shared_ptr<LargeObject>> & collection,
+                  std::default_random_engine & engine ) {
 
     // MAKE YOUR CHANGES IN THIS FUNCTION
 
@@ -80,12 +81,10 @@ void doStuff() {
 
     std::random_device device ;
     std::default_random_engine engine(device()) ;
-
-    // Original collection
-
-    std::vector<LargeObject*> objVector(10);
+    std::vector<std::shared_ptr<LargeObject>> objVector(10);
+    
     for ( auto & ptr : objVector ) {
-        ptr = new LargeObject();
+        ptr = std::make_shared<LargeObject>();
     }
 
     // Let's copy the whole collection
@@ -98,22 +97,13 @@ void doStuff() {
     removeRandom(objVectorCopy,engine);
     removeRandom(objVectorCopy,engine);
     // ...
-    for (auto objPtr : objVector ) {
+    for (const auto objPtr : objVector ) {
         changeLargeObject(*objPtr) ;
     }
 
     // ONCE YOU FIXED CODE ABOVE WITH SHARED POINTERS
     // THE UGLY CODE BELOW SHOULD BECOME UNNECESSARY
 
-    for ( auto objPtr : objVector ) {
-        delete objPtr ;
-    }
-    for ( auto objPtr : objVectorCopy ) {
-        // If the element is in the original collection, it was already deleted.
-        if (std::find(objVector.begin(), objVector.end(), objPtr) == objVector.end()) {
-            delete objPtr;
-        }
-    }
 
 }
 
