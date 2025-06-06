@@ -60,7 +60,8 @@ class Observer {
 
   public:
 
-    Observer( const Owner & owner ) : _largeObject(owner.getLargeObject()) {}
+    Observer( const Owner & owner ) 
+    : _largeObject(owner.getLargeObject()) {}
 
   void setValue(double v) {
         if (auto ptr = _largeObject.lock()) {

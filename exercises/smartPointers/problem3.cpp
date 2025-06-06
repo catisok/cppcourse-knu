@@ -53,10 +53,10 @@ void removeRandom(std::vector<std::shared_ptr<LargeObject>> & collection,
                   std::default_random_engine & engine ) {
 
     // MAKE YOUR CHANGES IN THIS FUNCTION
-
+if (!collection.empty()) {
     auto pos = collection.begin() + engine() % collection.size() ;
     collection.erase(pos);
-
+}
 }
 
 // A function to do something with a large object.

@@ -75,5 +75,7 @@ void doStuff() {
 int main() {
 
     doStuff() ;
+    std::cout << "Program finished.\n";
+    return 0;
 
 }
